@@ -38,7 +38,7 @@ public class BinDtoHelper
         }
         if(numberOfBins<=0)
         {
-            throw new ApiException("Enter valid number of Bins");
+            throw new ApiException("Number of Bins should be greater than 0");
         }
     }
 }

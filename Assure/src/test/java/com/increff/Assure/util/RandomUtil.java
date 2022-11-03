@@ -23,7 +23,15 @@ public class RandomUtil
 
     public static int getRandomNumber()
     {
-        return (int) (Math.random()*999999999);
+        return (int) (Math.random()*9999999);
+    }
+
+    public static Long getRandomNumberBetween1to100()
+    {
+        int max = 100;
+        int min = 1;
+        int range = max - min + 1;
+        return (long)(Math.random() * range) +min;
     }
 
 }

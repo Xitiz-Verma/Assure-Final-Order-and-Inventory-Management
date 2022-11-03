@@ -84,8 +84,4 @@ public class ProductApi {
         return productDao.selectByClientSkuIdandClientId(clientSkuId,clientId);
     }
 
-//    public ProductPojo selectByGlobalSkuId(Long globalSkuId)
-//    {
-//        return productDao.selectByGlobalSkuId(globalSkuId);
-//    }
 }

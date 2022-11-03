@@ -9,6 +9,7 @@ import com.increff.Assure.util.UserType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
@@ -20,6 +21,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.increff.Assure.util.RandomUtil.getRandomNumber;
 import static com.increff.Assure.util.RandomUtil.getRandomString;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,7 +34,7 @@ public class ProductControllerTest {
     private ProductController productController;
 
     @Resource
-    private UserDto userDto;
+    private UserController userController;
 
     @Test
     public void bulkAddTest()throws ApiException
@@ -62,8 +64,96 @@ public class ProductControllerTest {
 
         Assert.assertEquals(productController.getProductById(globalSkuId).getClientSkuId(),productData.getClientSkuId());
 
+        Long randomGlobalSkuId = Long.valueOf(getRandomNumber());
+        try{
+            productController.getProductById((long)randomGlobalSkuId);
+        }catch (ApiException e)
+        {
+            Assert.assertEquals("GlobalSkuid does not exist " + randomGlobalSkuId,e.getMessage());
+        }
     }
 
+    @Test
+    public void updateTest()throws ApiException
+    {
+        Long clientId = generateClientId();
+        List<ProductForm> productFormList = new ArrayList<>();
+        ProductForm productForm = generateProductForm();
+        productFormList.add(productForm);
+        productController.bulkAdd(productFormList,clientId);
+
+        Long globalSkuId = productController.getAll().get(0).getGlobalSkuId();
+        productForm.setName("Sneakers");
+        productController.update(productForm,globalSkuId);
+        String name = productController.getAll().get(0).getName();
+        Assert.assertEquals("sneakers",name);
+
+    }
+
+    @Test
+    public void validationTest()throws ApiException
+    {
+        Long clientId = generateClientId();
+        ProductForm productForm = new ProductForm();
+        List<ProductForm> productFormList = new ArrayList<>();
+
+        try
+        {
+            productController.bulkAdd(productFormList,clientId);
+        }catch (ApiException e)
+        {
+            Assert.assertEquals("ProductForm List cannot be empty",e.getMessage());
+        }
+        productFormList.add(productForm);
+        try
+        {
+            productController.bulkAdd(productFormList,clientId);
+        }catch (ApiException e)
+        {
+            Assert.assertEquals("ClientSkuId cannot be null or empty",e.getMessage());
+        }
+
+        productForm.setClientSkuId(getRandomString());
+        productFormList.add(productForm);
+        try
+        {
+            productController.bulkAdd(productFormList,clientId);
+        }catch (ApiException e)
+        {
+            Assert.assertEquals("Productname cannot be null or empty",e.getMessage());
+        }
+
+        productForm.setName(getRandomString());
+        productFormList.add(productForm);
+        try
+        {
+            productController.bulkAdd(productFormList,clientId);
+        }catch (ApiException e)
+        {
+            Assert.assertEquals("BrandId cannot be null or empty",e.getMessage());
+        }
+
+        productForm.setBrandId(getRandomString());
+        productFormList.add(productForm);
+        try
+        {
+            productController.bulkAdd(productFormList,clientId);
+        }catch (ApiException e)
+        {
+            Assert.assertEquals("Mrp cannot be null or less than 0.0",e.getMessage());
+        }
+
+        productForm.setMrp((double) getRandomNumber());
+        productFormList.add(productForm);
+        try
+        {
+            productController.bulkAdd(productFormList,clientId);
+        }catch (ApiException e)
+        {
+            Assert.assertEquals("Description cannot be null or empty",e.getMessage());
+        }
+
+    }
 
     private ProductForm generateProductForm()throws ApiException
     {
@@ -84,6 +174,7 @@ public class ProductControllerTest {
         return productForm;
     }
 
+
     private Long generateClientId() throws ApiException {
         String name = getRandomString();
         UserType userType = UserType.CLIENT;
@@ -91,8 +182,8 @@ public class ProductControllerTest {
         UserForm userForm = new UserForm();
         userForm.setName(name);
         userForm.setUserType(userType);
-        userDto.add(userForm);
-        Long id = (userDto.getAll()).get(0).getId();
+        userController.add(userForm);
+        Long id = (userController.getAll()).get(0).getId();
         return id;
     }
 }

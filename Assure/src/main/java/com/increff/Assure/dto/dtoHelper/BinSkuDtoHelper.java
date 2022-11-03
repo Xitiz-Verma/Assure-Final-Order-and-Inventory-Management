@@ -83,12 +83,11 @@ public class BinSkuDtoHelper
 
     public static void validateList(List<BinSkuItemForm> binSkuItemFormList,Long MAX_LIST_SIZE)throws ApiException
     {
+        ValidationUtil.validateListSize("BinSkuItemForm",binSkuItemFormList,MAX_LIST_SIZE);
         for(BinSkuItemForm binSkuItemForm : binSkuItemFormList)
         {
             validate(binSkuItemForm);
         }
-
-        ValidationUtil.validateListSize("binSkuItemForm",binSkuItemFormList,MAX_LIST_SIZE);
     }
     public static List<BinSkuItemForm> normalizeList(List<BinSkuItemForm> binSkuItemFormList)
     {
@@ -101,6 +100,7 @@ public class BinSkuDtoHelper
 
     public static void validate(BinSkuItemForm binSkuItemForm)throws ApiException
     {
+
         if(isNull(binSkuItemForm.getClientSkuId()) || binSkuItemForm.getClientSkuId().isEmpty())
         {
             throw new ApiException("ClientSkuId cannot be null or empty");

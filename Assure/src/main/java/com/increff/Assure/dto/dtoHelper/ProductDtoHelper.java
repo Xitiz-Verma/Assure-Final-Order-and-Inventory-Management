@@ -84,11 +84,11 @@ public class ProductDtoHelper
 
     public static void validateList(List<ProductForm> productFormList,Long MAX_LIST_SIZE)throws ApiException
     {
+        ValidationUtil.validateListSize("ProductForm",productFormList,MAX_LIST_SIZE);
         for(ProductForm productForm : productFormList)
         {
             validate(productForm);
         }
-        ValidationUtil.validateListSize("ProductList",productFormList,MAX_LIST_SIZE);
     }
 
     public static void normalizeList(List<ProductForm> productFormList)
@@ -126,6 +126,7 @@ public class ProductDtoHelper
 
     public static ProductForm normalize(ProductForm productForm)
     {
+        productForm.setClientSkuId(productForm.getClientSkuId().trim().toLowerCase());
         productForm.setName(productForm.getName().trim().toLowerCase());
         productForm.setBrandId(productForm.getBrandId().trim().toLowerCase());
         productForm.setDescription(productForm.getDescription().trim().toLowerCase());

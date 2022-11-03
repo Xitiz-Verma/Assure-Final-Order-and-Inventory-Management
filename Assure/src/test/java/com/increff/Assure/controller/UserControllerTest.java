@@ -139,9 +139,7 @@ public class UserControllerTest {
         userForm.setName(" "+userForm.getName()+" ");
         userForm.setName(userForm.getName().toUpperCase());
         userController.add(userForm);
-
-        List<UserData> userDataList = userController.getAll();
-        UserData userData = userDataList.get(0);
+        UserData userData = userController.getAll().get(0);
         Assert.assertEquals(userForm.getName(),userData.getName());
 
     }
