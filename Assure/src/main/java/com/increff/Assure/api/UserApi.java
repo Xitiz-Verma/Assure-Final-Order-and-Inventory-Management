@@ -27,7 +27,7 @@ public class UserApi
     }
 
     public void add(UserPojo userPojo)throws ApiException
-    {
+    {//TODO:use meaning names in pojos ..dont use 2,3
         UserPojo userPojo2 = selectByNameandUserType(userPojo.getName(),userPojo.getUserType());
         if(isNull(userPojo2)==false)
         {

@@ -13,7 +13,7 @@ import javax.xml.transform.TransformerException;
 import java.io.IOException;
 
 @Api
-@RestController()
+@RestController
 public class OrderController
 {
 
@@ -34,7 +34,15 @@ public class OrderController
         orderDto.updateStatus(orderStatusUpdateForm);
     }
 
-    @ApiOperation(value = "Get Invoice")
+    @ApiOperation(value = "Update Order Status")
+    @RequestMapping(path = "/orders/{orderId}/allocate-order", method = RequestMethod.PUT)
+    public void allocateOrder(@PathVariable Long orderId)throws ApiException
+    {
+        orderDto.allocateOrder(orderId);
+    }
+
+
+    @ApiOperation(value = "Get Invoice and FulFill Order")
     @RequestMapping(path = "/orders/{orderId}/get-invoice",method = RequestMethod.GET)
     public String getInvoice(@PathVariable Long orderId)throws ApiException, IOException, TransformerException
     {

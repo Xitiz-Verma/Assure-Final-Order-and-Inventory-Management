@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+//TODO: change table unique constraints
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class UserPojo extends AbstractPojo
 {

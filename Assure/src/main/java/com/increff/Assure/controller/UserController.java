@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 public class UserController
 {
+    //TODO : Refactor all modules to smallcase
 
     @Autowired
     private UserDto userDto;

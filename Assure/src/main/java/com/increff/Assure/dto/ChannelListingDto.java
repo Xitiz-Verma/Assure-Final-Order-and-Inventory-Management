@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.increff.Assure.dto.dtoHelper.ChannelListingDtoHelper.checkDuplicateChannelListingFormList;
+import static com.increff.Assure.dto.dtoHelper.ChannelListingDtoHelper.*;
 import static com.increff.Assure.util.ValidationUtil.throwErrorIfNotEmpty;
 import static com.increff.Assure.util.ValidationUtil.validateListSize;
 import static java.util.Objects.isNull;
@@ -43,10 +43,9 @@ public class ChannelListingDto
     @Transactional(rollbackFor = ApiException.class)
     public Integer add(ChannelListingUploadForm channelListingUploadForm)throws ApiException
     {
-        //TODO : validateForm(channelListingUploadForm);
-        validateListSize("Channel Listing Form List",channelListingUploadForm.getChannelListingFormList(),MAX_LIST_SIZE);
+        validateForm(channelListingUploadForm);
         checkDuplicateChannelListingFormList(channelListingUploadForm.getChannelListingFormList());
-
+        normalize(channelListingUploadForm);
         Long clientId = channelListingUploadForm.getClientId();
         Long channelId = channelListingUploadForm.getChannelId();
         userApi.getCheck(clientId);
@@ -80,7 +79,6 @@ public class ChannelListingDto
         }
         throwErrorIfNotEmpty(errorDataList);
         return channelListingPojoList;
-
     }
 
 }

@@ -29,15 +29,16 @@ import static com.increff.Assure.util.ValidationUtil.throwErrorIfNotEmpty;
 import static com.increff.Assure.util.ValidationUtil.validateList;
 import static java.util.Objects.isNull;
 
-@Service
+
 @Transactional(rollbackFor = ApiException.class)
+@Service
 public class OrderDto {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
     private final static Long MAX_LIST_SIZE = 1000L;
 
-    private final static String INTERNAL_CHANNEL = "INTERNAL";
+    private final static String INTERNAL_CHANNEL = "internal";
 
     private final static Map<OrderStatus, OrderStatus> validStatusUpdateMap =
             ImmutableMap.<OrderStatus, OrderStatus>builder()
@@ -63,12 +64,11 @@ public class OrderDto {
 
     public Integer add(OrderForm orderForm) throws ApiException {
         List<OrderItemForm> orderItemFormList = orderForm.getOrderItemFormList();
-        validateList("Order Item List", orderItemFormList, MAX_LIST_SIZE);
+        validateOrderForm(orderForm);
+        normalize(orderForm);
         checkDuplicateClientSkuIds(orderItemFormList);
 
-        userApi.checkByIdAndType(orderForm.getClientId(), UserType.CLIENT);
-        userApi.checkByIdAndType(orderForm.getCustomerId(), UserType.CUSTOMER);
-
+        //TODO: Make all throw Api Exception
         ChannelPojo channelPojo = channelApi.selectByChannelName(INTERNAL_CHANNEL);
         if (isNull(channelPojo)) {
             throw new ApiException(INTERNAL_CHANNEL + " channel does not exist");
@@ -86,7 +86,6 @@ public class OrderDto {
     }
 
     public void updateStatus(OrderStatusUpdateForm orderStatusUpdateForm) throws ApiException {
-        //TODO: validateForm(orderStatusUpdateForm);
         OrderPojo orderPojo = orderApi.getCheck(orderStatusUpdateForm.getOrderId());
 
         if (validStatusUpdateMap.get(orderPojo.getStatus()) != orderStatusUpdateForm.getUpdateStatusTo()) {
@@ -194,7 +193,11 @@ public class OrderDto {
 
 
     public String getInvoice(Long orderId) throws ApiException, IOException, TransformerException {
+
         OrderPojo orderPojo = orderApi.getCheck(orderId);
+        if(orderPojo.getStatus()==OrderStatus.ALLOCATED)
+            fulfillOrder(orderId);
+        orderPojo = orderApi.getCheck(orderId);
         if (orderPojo.getStatus() != OrderStatus.FULFILLED) {
             throw new ApiException("Order should be fulfilled for invoice generation");
         }

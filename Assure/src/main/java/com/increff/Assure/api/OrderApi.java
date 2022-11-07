@@ -52,7 +52,7 @@ public class OrderApi
     public Long allocateOrderItemQty(OrderItemPojo orderItemPojo, Long invQty)
     {
         Long allocatedQty = min(invQty,orderItemPojo.getOrderedQuantity() - orderItemPojo.getAllocatedQuantity());
-        orderItemPojo.setAllocatedQuantity(allocatedQty);
+        orderItemPojo.setAllocatedQuantity(allocatedQty+orderItemPojo.getAllocatedQuantity());
         return allocatedQty;
     }
 

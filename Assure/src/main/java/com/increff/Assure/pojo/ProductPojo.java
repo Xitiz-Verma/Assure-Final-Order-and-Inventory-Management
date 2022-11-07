@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"globalSkuId","clientSkuId"})})
 public class ProductPojo
 {
+    //TODO:SEarch indexes in MYSQL
     @Id
     @TableGenerator(name = TableConstants.SEQ_PRODUCT , initialValue = TableConstants.SEQ_INITIAL_VALUE)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TableConstants.SEQ_PRODUCT)
@@ -32,5 +33,5 @@ public class ProductPojo
     private Double mrp;
 
     @Column(nullable = false)
-    private String description;
+    private String description;//TODO:chanege nullable
 }

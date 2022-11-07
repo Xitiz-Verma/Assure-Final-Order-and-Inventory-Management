@@ -52,6 +52,7 @@ public class ProductControllerTest {
 
     }
 
+
     @Test
     public void selectByIdTest()throws ApiException
     {
@@ -83,10 +84,12 @@ public class ProductControllerTest {
         productController.bulkAdd(productFormList,clientId);
 
         Long globalSkuId = productController.getAll().get(0).getGlobalSkuId();
-        productForm.setName("Sneakers");
         productController.update(productForm,globalSkuId);
-        String name = productController.getAll().get(0).getName();
-        Assert.assertEquals("sneakers",name);
+        ProductData productData = productController.getAll().get(0);
+        Assert.assertEquals(productForm.getName().trim().toLowerCase(),productData.getName());
+        Assert.assertEquals(productForm.getDescription().trim().toLowerCase(),productData.getDescription());
+        Assert.assertEquals(productForm.getMrp(),productData.getMrp());
+
 
     }
 

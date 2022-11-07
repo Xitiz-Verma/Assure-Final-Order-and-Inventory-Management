@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!--TODO: make it com.increff-->
     <groupId>org.example</groupId>
     <artifactId>Omni</artifactId>
     <packaging>pom</packaging>

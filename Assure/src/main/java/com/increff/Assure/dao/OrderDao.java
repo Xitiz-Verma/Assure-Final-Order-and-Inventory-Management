@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -24,6 +25,11 @@ public class OrderDao extends AbstractDao
         TypedQuery<OrderPojo> query = em().createQuery(SELECT_BY_ORDER_ID, OrderPojo.class);
         query.setParameter("id",id);
         return (OrderPojo) getSingle(query);
+    }
+
+    public List<OrderPojo> selectAll()
+    {
+        return selectAll(OrderPojo.class);
     }
 
     public OrderPojo selectByChannelIdAndChannelOrderId(Long channelId, String channelOrderId)

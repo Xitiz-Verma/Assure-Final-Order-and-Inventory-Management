@@ -46,7 +46,7 @@ public class ChannelListingApi
         {
             ChannelListingPojo exists = selectByAllFields(channelListingPojo);
             if(!isNull(exists))
-            {
+            {//TODO:CHECK 7.2
                 errorDataList.add(new ErrorData(row,"Channel Listing Data already exists"));
             }
             row++;

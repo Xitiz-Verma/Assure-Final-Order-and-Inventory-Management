@@ -7,8 +7,8 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"channelSkuId"})})
+@Entity//TODO:check for uniqueness
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"channelSkuId","channelId"})})
 public class ChannelListingPojo extends AbstractPojo{
 
     @Id

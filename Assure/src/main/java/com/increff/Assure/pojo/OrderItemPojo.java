@@ -11,7 +11,7 @@ import static com.increff.Assure.pojo.TableConstants.SEQ_ORDER_ITEM;
 @Getter
 @Setter
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"OrderId","globalSkuId"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"orderId","globalSkuId"})})
 public class OrderItemPojo extends AbstractPojo{
 
     @Id

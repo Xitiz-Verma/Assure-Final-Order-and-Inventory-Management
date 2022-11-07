@@ -7,6 +7,7 @@ import com.increff.Assure.pojo.ProductPojo;
 import com.increff.Assure.util.ValidationUtil;
 import com.increff.exception.ApiException;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +16,7 @@ import static java.util.Objects.isNull;
 
 public class ProductDtoHelper
 {
+    public static DecimalFormat df = new DecimalFormat("#.##");
 
     public static List<ProductData> convertProductPojoListtoProductDataList(List<ProductPojo> productPojoList)
     {
@@ -130,6 +132,7 @@ public class ProductDtoHelper
         productForm.setName(productForm.getName().trim().toLowerCase());
         productForm.setBrandId(productForm.getBrandId().trim().toLowerCase());
         productForm.setDescription(productForm.getDescription().trim().toLowerCase());
+        productForm.setMrp(Double.valueOf(df.format(productForm.getMrp())));
         return productForm;
     }
 
